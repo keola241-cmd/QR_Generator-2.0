@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator QR Code - Absensi</title>
-    <!-- CSS Internal / External -->
+    <!-- CSS External -->
     <link rel="stylesheet" href="css/style.css">
     <!-- Library QR Code CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -46,7 +46,7 @@
             <!-- INPUT ROLE & DIVISI/KELAS -->
             <div class="form-row">
                 <div class="custom-dropdown">
-                    <div class="dropdown-selected" id="dropdown-selected" onclick="toggleDropdown()">> Role</div>
+                    <div class="dropdown-selected" id="dropdown-selected" onclick="toggleDropdown()">> Status</div>
                     <div class="dropdown-list" id="dropdown-list">
                         <div class="dropdown-item" onclick="pilihRole('Pelajar')">Pelajar</div>
                         <div class="dropdown-item" onclick="pilihRole('Guru')">Guru</div>
@@ -72,8 +72,6 @@
             <button class="btn-download" onclick="downloadKartu()">Download Kartu (PNG)</button>
         </div>
     </div>
-
-    
 
     <!-- JS External -->
     <script src="js/script.js"></script>

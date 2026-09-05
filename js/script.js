@@ -16,7 +16,6 @@ window.onclick = function(event) {
     }
 }
 
-// Fungsi untuk membuat 4 digit nomor acak (1000 - 9999)
 function generateRandomID() {
     const randomNumber = Math.floor(1000 + Math.random() * 9000);
     document.getElementById('id_user').value = randomNumber;
@@ -59,9 +58,16 @@ function buatQR() {
         return;
     }
 
-    // Format QR Terbaru: ID|Nama|Kelas/Divisi|Role|Jenis Kelamin
+    // Format Data QR Code
     const dataQR = `${id}|${nama}|${divisi}|${roleAktif}|${gender}`;
+    
+    // Update Teks Nama di Kartu Preview
     document.getElementById("display-nama").innerText = nama;
+
+    // Ganti Gambar Background Berdasarkan Gender
+    const cardPreview = document.getElementById("id-card-preview");
+    const templatePath = (gender === 'Perempuan') ? 'template/template_pink.jpg' : 'template/template_biru.jpg';
+    cardPreview.style.backgroundImage = `url('${templatePath}')`;
 
     const qrContainer = document.getElementById("qrcode-container");
     qrContainer.innerHTML = ""; 
@@ -88,52 +94,69 @@ function downloadKartu() {
     const qrCanvasAsli = document.querySelector('#qrcode-container canvas');
     if (!qrCanvasAsli) return;
 
-    const canvasWidth = 630;
-    const canvasHeight = 880;
+    const gender = document.getElementById('gender').value;
+    const namaUser = document.getElementById('nama').value.trim();
+    const divisi = document.getElementById('divisi').value.trim();
+
+    const templatePath = (gender === 'Perempuan') ? 'template/template_pink.jpg' : 'template/template_biru.jpg';
+
+    const canvasWidth = 700;
+    const canvasHeight = 1000;
     
     const canvas = document.createElement('canvas');
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     const ctx = canvas.getContext('2d');
 
-    // 1. Background Hijau
-    ctx.fillStyle = "#81d157"; 
-    ctx.beginPath();
-    ctx.roundRect(0, 0, canvasWidth, canvasHeight, 40);
-    ctx.fill();
+    const bgImg = new Image();
+    bgImg.src = templatePath;
+    bgImg.onload = function() {
+        // 1. Render Background
+        ctx.drawImage(bgImg, 0, 0, canvasWidth, canvasHeight);
 
-    // 2. Kotak Putih (Tempat QR)
-    ctx.fillStyle = "#ffffff"; 
-    ctx.beginPath();
-    ctx.roundRect(40, 40, 550, 550, 25); 
-    ctx.fill();
+        // 2. Kotak Putih Penutup Placeholder (Presisi 580x580)
+        const boxX = 60;
+        const boxY = 83;
+        const boxSize = 580;
 
-    // 3. QR Code Image
-    ctx.drawImage(qrCanvasAsli, 75, 75, 480, 480);
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        if (ctx.roundRect) {
+            ctx.roundRect(boxX, boxY, boxSize, boxSize, 42);
+        } else {
+            ctx.rect(boxX, boxY, boxSize, boxSize);
+        }
+        ctx.fill();
 
-    // 4. Teks Nama
-    const namaUser = document.getElementById('nama').value.trim();
-    ctx.fillStyle = "#000000";
-    ctx.textAlign = "center";
-    
-    let fontSize = 60;
-    if (namaUser.length > 15) fontSize = 45;
-    if (namaUser.length > 25) fontSize = 35;
-    
-    ctx.font = `bold ${fontSize}px "Segoe UI", sans-serif`;
-    ctx.fillText(namaUser, 315, 730);
+        // 3. Render QR Code di Tengah Kotak Putih
+        const padding = 30;
+        const qrSize = boxSize - (padding * 2);
+        ctx.drawImage(qrCanvasAsli, boxX + padding, boxY + padding, qrSize, qrSize);
 
-    // 5. Label Ukuran Kartu
-    ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-    ctx.textAlign = "right";
-    ctx.font = "bold 22px 'Segoe UI', sans-serif";
-    ctx.fillText("6,3 x 8,8 cm", 580, 840);
+        // 4. Render Nama dengan Font Ceria Fredoka
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetX = 3;
+        ctx.shadowOffsetY = 3;
 
-    // 6. Eksekusi Download
-    const url = canvas.toDataURL("image/png");
-    const a = document.createElement('a');
-    const divisi = document.getElementById('divisi').value.trim();
-    a.download = `ID_Kartu_${namaUser.replace(/\s+/g, '_')}_${divisi}.png`;
-    a.href = url;
-    a.click();
+        // Auto-scale font sesuai panjang nama
+        let fontSize = 46;
+        if (namaUser.length > 15) fontSize = 36;
+        if (namaUser.length > 22) fontSize = 28;
+
+        ctx.font = `bold ${fontSize}px "Fredoka", "Comic Sans MS", cursive, sans-serif`;
+        ctx.fillText(namaUser, canvasWidth / 2, 725);
+
+        // Reset Shadow Effect
+        ctx.shadowColor = "transparent";
+
+        // 5. Eksekusi Download File PNG
+        const url = canvas.toDataURL("image/png");
+        const a = document.createElement('a');
+        a.download = `ID_Kartu_${namaUser.replace(/\s+/g, '_')}_${divisi}.png`;
+        a.href = url;
+        a.click();
+    };
 }
