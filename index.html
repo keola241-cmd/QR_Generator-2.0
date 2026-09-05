@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator QR Code - Absensi</title>
+    <!-- CSS Internal / External -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Library QR Code CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <div class="main-container" id="main-container">
+        <!-- KIRI: FORM INPUT -->
+        <div class="form-card">
+            <h2>Buat QR</h2>
+            
+            <!-- INPUT NOMOR + TOMBOL RANDOM -->
+            <div class="form-group">
+                <div class="input-with-btn">
+                    <input type="text" id="id_user" placeholder="Masukan Nomor Apa Saja (Contoh: Nomor Absen)">
+                    <button type="button" class="btn-random" onclick="generateRandomID()" title="Acak Nomor ID">🎲</button>
+                </div>
+                <small class="input-hint">*Mohon jangan memasukkan NIS atau data sensitif.</small>
+            </div>
+
+            <!-- INPUT NAMA -->
+            <div class="form-group">
+                <input type="text" id="nama" placeholder="Masukan Nama Lengkap (Contoh: Michelle)">
+            </div>
+
+            <!-- INPUT JENIS KELAMIN -->
+            <div class="form-group">
+                <select id="gender" class="custom-select">
+                    <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                </select>
+            </div>
+
+            <div class="role-label-container">
+                <div class="role-label-badge">Masukan Status</div>
+            </div>
+
+            <!-- INPUT ROLE & DIVISI/KELAS -->
+            <div class="form-row">
+                <div class="custom-dropdown">
+                    <div class="dropdown-selected" id="dropdown-selected" onclick="toggleDropdown()">> Role</div>
+                    <div class="dropdown-list" id="dropdown-list">
+                        <div class="dropdown-item" onclick="pilihRole('Pelajar')">Pelajar</div>
+                        <div class="dropdown-item" onclick="pilihRole('Guru')">Guru</div>
+                        <div class="dropdown-item" onclick="pilihRole('Karyawan')">Karyawan</div>
+                        <div class="dropdown-item" onclick="pilihRole('Mahasiswa')">Mahasiswa</div>
+                        <div class="dropdown-item" onclick="pilihRole('Anak Magang')">Anak Magang</div>
+                    </div>
+                </div>
+                <input type="text" id="divisi" class="input-divisi" placeholder="Pilih Role Dahulu" disabled>
+            </div>
+
+            <button class="btn-generate" onclick="buatQR()">Buat QR CODE</button>
+        </div>
+
+        <!-- KANAN / BAWAH: PREVIEW KARTU & DOWNLOAD -->
+        <div class="preview-wrapper" id="preview-wrapper">
+            <div class="id-card-preview" id="id-card-preview">
+                <div class="qr-box" id="qrcode-container"></div>
+                <div class="card-name" id="display-nama">Nama</div>
+                <div class="card-size-label">6,3 x 8,8 cm</div>
+            </div>
+            
+            <button class="btn-download" onclick="downloadKartu()">Download Kartu (PNG)</button>
+        </div>
+    </div>
+
+    
+
+    <!-- JS External -->
+    <script src="js/script.js"></script>
+</body>
+</html>
