@@ -25,12 +25,32 @@ function pilihRole(role) {
     roleAktif = role;
     const textSelected = document.getElementById("dropdown-selected");
     const divisiInput = document.getElementById("divisi");
+    
+    const selectGelar = document.getElementById("selectGelar");
+    const selectJabatan = document.getElementById("selectJabatan");
 
     let labelUI = role;
     if (role === 'Anak Magang') labelUI = 'Magang';
 
     textSelected.innerText = `> ${labelUI}`;
     
+    // Tampilkan Kotak Gelar/Jabatan berdasarkan Role
+    if (role === 'Guru') {
+        selectGelar.style.display = "block";
+        selectJabatan.style.display = "none";
+        selectJabatan.value = "";
+    } else if (role === 'Karyawan') {
+        selectGelar.style.display = "none";
+        selectJabatan.style.display = "block";
+        selectGelar.value = "";
+    } else {
+        selectGelar.style.display = "none";
+        selectJabatan.style.display = "none";
+        selectGelar.value = "";
+        selectJabatan.value = "";
+    }
+
+    // Atur Input Divisi/Kelas
     if (role === 'Pelajar') {
         divisiInput.disabled = false;
         divisiInput.value = "";
@@ -45,11 +65,11 @@ function pilihRole(role) {
 
 function buatQR() {
     const id = document.getElementById('id_user').value.trim();
-    const nama = document.getElementById('nama').value.trim();
+    let namaInput = document.getElementById('nama').value.trim();
     const gender = document.getElementById('gender').value;
     const divisi = document.getElementById('divisi').value.trim();
 
-    if (!id || !nama || !gender || !roleAktif) {
+    if (!id || !namaInput || !gender || !roleAktif) {
         alert("Nomor, Nama, Jenis Kelamin, dan Role wajib diisi!");
         return;
     }
@@ -58,15 +78,25 @@ function buatQR() {
         return;
     }
 
+    // Penggabungan Nama dengan Gelar / Jabatan
+    let namaLengkap = namaInput;
+    if (roleAktif === 'Guru') {
+        const gelar = document.getElementById('selectGelar').value;
+        if (gelar) namaLengkap = `${namaInput}, ${gelar}`;
+    } else if (roleAktif === 'Karyawan') {
+        const jabatan = document.getElementById('selectJabatan').value;
+        if (jabatan) namaLengkap = `${namaInput} - ${jabatan}`;
+    }
+
     // Format Data QR Code
-    const dataQR = `${id}|${nama}|${divisi}|${roleAktif}|${gender}`;
+    const dataQR = `${id}|${namaLengkap}|${divisi}|${roleAktif}|${gender}`;
     
     // Update Teks Nama di Kartu Preview
-    document.getElementById("display-nama").innerText = nama;
+    document.getElementById("display-nama").innerText = namaLengkap;
 
-    // Ganti Gambar Background Berdasarkan Gender
+    // Ganti Gambar Background Berdasarkan Gender (Folder Template/)
     const cardPreview = document.getElementById("id-card-preview");
-    const templatePath = (gender === 'Perempuan') ? 'template/template_pink.jpg' : 'template/template_biru.jpg';
+    const templatePath = (gender === 'Perempuan') ? 'Template/template_pink.jpg' : 'Template/template_biru.jpg';
     cardPreview.style.backgroundImage = `url('${templatePath}')`;
 
     const qrContainer = document.getElementById("qrcode-container");
@@ -95,10 +125,10 @@ function downloadKartu() {
     if (!qrCanvasAsli) return;
 
     const gender = document.getElementById('gender').value;
-    const namaUser = document.getElementById('nama').value.trim();
+    const namaUser = document.getElementById('display-nama').innerText;
     const divisi = document.getElementById('divisi').value.trim();
 
-    const templatePath = (gender === 'Perempuan') ? 'template/template_pink.jpg' : 'template/template_biru.jpg';
+    const templatePath = (gender === 'Perempuan') ? 'Template/template_pink.jpg' : 'Template/template_biru.jpg';
 
     const canvasWidth = 700;
     const canvasHeight = 1000;
