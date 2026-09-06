@@ -61,6 +61,21 @@ h2 {
     position: relative;
 }
 
+/* Wrapper untuk Input Nama + Dropdown Gelar/Jabatan */
+.nama-input-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.extra-select {
+    width: 120px !important;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    flex-shrink: 0;
+}
+
 .input-hint {
     display: block;
     margin-top: 6px;
