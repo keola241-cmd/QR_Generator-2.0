@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator QR Code - Absensi</title>
     <!-- CSS External -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="static/style.css">
     <!-- Library QR Code CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
@@ -25,9 +25,32 @@
                 <small class="input-hint">*Mohon jangan memasukkan NIS atau data sensitif.</small>
             </div>
 
-            <!-- INPUT NAMA -->
+            <!-- INPUT NAMA + EXTRA KOTAK GELAR / JABATAN -->
             <div class="form-group">
-                <input type="text" id="nama" placeholder="Masukan Nama Lengkap (Contoh: Michelle)">
+                <div class="nama-input-wrapper">
+                    <input type="text" id="nama" placeholder="Masukan Nama Lengkap (Contoh: Michelle)">
+                    
+                    <!-- Dropdown Gelar (Khusus Guru) -->
+                    <select id="selectGelar" class="custom-select extra-select" style="display: none;">
+                        <option value="">- Gelar -</option>
+                        <option value="S.Pd.">S.Pd.</option>
+                        <option value="M.Pd.">M.Pd.</option>
+                        <option value="S.Kom.">S.Kom.</option>
+                        <option value="S.Ikom.">S.Ikom.</option>
+                        <option value="S.T.">S.T.</option>
+                        <option value="S.Si.">S.Si.</option>
+                    </select>
+
+                    <!-- Dropdown Jabatan (Khusus Karyawan) -->
+                    <select id="selectJabatan" class="custom-select extra-select" style="display: none;">
+                        <option value="">- Jabatan -</option>
+                        <option value="Staff Admin">Staff Admin</option>
+                        <option value="HRD">HRD</option>
+                        <option value="Finance">Finance</option>
+                        <option value="IT Support">IT Support</option>
+                        <option value="Security">Security</option>
+                    </select>
+                </div>
             </div>
 
             <!-- INPUT JENIS KELAMIN -->
@@ -74,6 +97,6 @@
     </div>
 
     <!-- JS External -->
-    <script src="js/script.js"></script>
+    <script src="static/script.js"></script>
 </body>
 </html>
